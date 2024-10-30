@@ -15,6 +15,7 @@ class DDPMSampler:
 
         self.num_train_timesteps = num_training_steps
         self.timesteps = torch.from_numpy(np.arange(0, num_training_steps)[::-1].copy())
+        self.set_inference_timesteps(num_inference_steps=50)
 
     def set_inference_timesteps(self, num_inference_steps=50):
         self.num_inference_steps = num_inference_steps
@@ -116,7 +117,7 @@ class DDPMSampler:
         # here mu = sqrt_alpha_prod * original_samples and sigma = sqrt_one_minus_alpha_prod
         noise = torch.randn(original_samples.shape, generator=self.generator, device=original_samples.device, dtype=original_samples.dtype)
         noisy_samples = sqrt_alpha_prod * original_samples + sqrt_one_minus_alpha_prod * noise
-        return noisy_samples
+        return noisy_samples, noise
 
         
 
