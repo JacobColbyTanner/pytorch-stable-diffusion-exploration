@@ -168,3 +168,4 @@ def get_time_embedding(timestep):
     x = torch.tensor(timestep, dtype=torch.float32)[:, None] * freqs[None]
     # Shape: (1, 160 * 2)
     return torch.cat([torch.cos(x), torch.sin(x)], dim=-1)
+

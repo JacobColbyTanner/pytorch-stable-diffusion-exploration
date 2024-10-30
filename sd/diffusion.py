@@ -193,6 +193,7 @@ class SwitchSequential(nn.Sequential):
             else:
                 x = layer(x)
         return x
+    
 
 class UNET(nn.Module):
     def __init__(self):

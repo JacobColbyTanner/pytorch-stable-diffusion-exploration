@@ -46,6 +46,7 @@ sampler.set_inference_timesteps(num_inference_steps=n_inference_steps)
 
 
 
+
 # Training loop
 for epoch in range(num_epochs):
     for batch_idx, (data, labels) in enumerate(train_loader):

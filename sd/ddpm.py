@@ -94,6 +94,7 @@ class DDPMSampler:
 
         return pred_prev_sample
     
+    
     def add_noise(
         self,
         original_samples: torch.FloatTensor,

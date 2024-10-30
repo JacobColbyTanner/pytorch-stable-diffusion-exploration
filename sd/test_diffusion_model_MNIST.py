@@ -83,6 +83,7 @@ ax[1].imshow(unnoised_data, cmap='gray')
 ax[1].set_title("Unnoised Image")
 ax[1].axis('off')
 
+
 plt.show()
 
 

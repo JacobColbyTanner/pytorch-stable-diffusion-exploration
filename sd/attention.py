@@ -82,6 +82,7 @@ class CrossAttention(nn.Module):
         batch_size, sequence_length, d_embed = input_shape
 
 
+
         # Divide each embedding of Q into multiple heads such that d_heads * n_heads = Dim_Q
         interim_shape = (batch_size, -1, self.n_heads, self.d_head)
         
