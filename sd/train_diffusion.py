@@ -12,9 +12,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Hyperparameters
-batch_size = 32
+batch_size = 64
 learning_rate = 1e-4
-num_epochs = 1
+num_epochs = 10
 num_timesteps = 1000
 n_inference_steps = 50
 loss_to_break = 0.01
@@ -54,13 +54,17 @@ for epoch in range(num_epochs):
         data = data.to(device)
         batch_size = data.size(0)
        
-            
-        labels_edit = torch.ones_like(data) * labels.view(-1, 1, 1, 1)
+        labels = labels.to(device)
+        labels_edit = torch.ones_like(data, device=device) * labels.view(-1, 1, 1, 1)
+        #send labels edit to the device
+        labels_edit = labels_edit.to(device)
 
         # Sample random timesteps uniformly
         timesteps = torch.randint(0, num_timesteps, (batch_size,), device=device).long()
         
         time_embedding = get_time_embedding(timesteps)
+        time_embedding = time_embedding.to(device)
+        
         # Add noise to the images
         noisy_data, noise = sampler.add_noise(data, timesteps)
        
@@ -84,6 +88,7 @@ for epoch in range(num_epochs):
         time_taken = end_time - start_time
 
         print(f'Epoch [{epoch+1}/{num_epochs}], Step [{batch_idx}/{len(train_loader)}], Loss: {loss.item():.4f}, Time: {time_taken:.4f}')
+
         if batch_idx % 100 == 0:
             print(f'Epoch [{epoch+1}/{num_epochs}], Step [{batch_idx}/{len(train_loader)}], Loss: {loss.item():.4f}')
             
@@ -123,10 +128,11 @@ for epoch in range(num_epochs):
             ax[2].set_title("Original Image")
             ax[2].axis('off')
             # Add overall plot title with the label from labels
-            fig.suptitle(f"Label: {labels[0]}")
+            fig.suptitle(f"Label: {labels[0]} - noise from t={timesteps[0]} forward diffusion steps")
 
-            plt.draw()
-            plt.pause(0.1)
+
+            # Save the plot
+            plt.savefig(f"images/diffusion_{epoch}_{batch_idx}.png")
 
             #set model back to train
             model.train()
