@@ -67,6 +67,9 @@ class SelfAttention(nn.Module):
 class CrossAttention(nn.Module):
     def __init__(self, n_heads, d_embed, d_cross, in_proj_bias=True, out_proj_bias=True):
         super().__init__()
+        #add embedding table
+        vocab_size = 26
+        self.embedding_table = nn.Embedding(vocab_size, d_cross)
         self.q_proj   = nn.Linear(d_embed, d_embed, bias=in_proj_bias)
         self.k_proj   = nn.Linear(d_cross, d_embed, bias=in_proj_bias)
         self.v_proj   = nn.Linear(d_cross, d_embed, bias=in_proj_bias)
@@ -77,7 +80,7 @@ class CrossAttention(nn.Module):
     def forward(self, x, y):
         # x (latent): # (Batch_Size, Seq_Len_Q, Dim_Q)
         # y (context): # (Batch_Size, Seq_Len_KV, Dim_KV) = (Batch_Size, 77, 768)
-
+        y = self.embedding_table(y) #embed the context tokens
         input_shape = x.shape
         batch_size, sequence_length, d_embed = input_shape
 
